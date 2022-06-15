@@ -4,32 +4,36 @@
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="@drawable/instabg"
     tools:context=".MainActivity">
 
 
     <ImageView
         android:id="@+id/iconbtn"
-        android:layout_width="130dp"
-        android:layout_height="105dp"
-        android:layout_marginBottom="300dp"
+        android:layout_width="230dp"
+        android:layout_height="100dp"
+        android:layout_marginBottom="320dp"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintHorizontal_bias="0.498"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintVertical_bias="0.576"
+        app:layout_constraintVertical_bias="0.687"
         app:srcCompat="@drawable/icon" />
 
     <TextView
         android:id="@+id/instabtn"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:text="INSTAGRAM"
-        android:textSize="30sp"
+        android:fontFamily="serif"
+        android:text="PARSTAGRAM"
+        android:textColor="@color/white"
+        android:textSize="45sp"
         android:textStyle="bold|italic"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintHorizontal_bias="0.494"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintTop_toBottomOf="@+id/iconbtn"
-        app:layout_constraintVertical_bias="0.088" />
+        app:layout_constraintVertical_bias="0.058" />
 </androidx.constraintlayout.widget.ConstraintLayout>
