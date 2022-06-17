@@ -1,0 +1,28 @@
+<?xml version="1.0" encoding="utf-8"?>
+<RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    xmlns:tools="http://schemas.android.com/tools"
+    android:id="@+id/rlComment"
+    android:layout_width="wrap_content"
+    android:layout_height="wrap_content">
+
+    <TextView
+        android:id="@+id/showAuthor"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="8dp"
+        android:layout_marginBottom="5dp"
+        android:textSize="15sp"
+        android:textStyle="bold"
+        tools:text="strawberry" />
+
+    <TextView
+        android:id="@+id/showComment"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:layout_below="@+id/showAuthor"
+        android:layout_marginStart="5dp"
+        android:layout_marginTop="-24dp"
+        android:layout_toEndOf="@+id/showAuthor"
+        tools:text="great pic! love to catch up" />
+</RelativeLayout>

@@ -34,12 +34,12 @@ public class PostDetailsActivity extends AppCompatActivity {
     private TextView tvCreatedAt;
     private ImageView ivPicture;
     private TextView tvCaption;
-//    private TextView tvPostLikes;
+    private TextView tvPostLikes;
     private ImageButton ibPostLikes;
     private ImageButton ibPostComments;
-//    private RecyclerView rvComments;
-    //private CommentsAdapter adapter;
-    //private List<Comment> allComments;
+    private RecyclerView rvComments;
+    private CommentsAdapter adapter;
+    private List<Comment> allComments;
     private Post post;
 
     @Override
@@ -49,18 +49,18 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvUsername = findViewById(R.id.tvUsername);
         tvCreatedAt = findViewById(R.id.tvCreatedAt);
         ivPicture = findViewById(R.id.ivPicture);
-        //tvPostLikes = findViewById(R.id.tvPostLikes);
+        tvPostLikes = findViewById(R.id.tvPostLikes);
         ibPostLikes = findViewById(R.id.ibPostLikes);
         ibPostComments = findViewById(R.id.ibPostComments);
         tvCaption = findViewById(R.id.tvCaption);
 
-//        rvComments = findViewById(R.id.rvComments);
-//        allComments = new ArrayList<>();
-//        adapter = new CommentsAdapter(this, allComments);
-//        rvComments.setAdapter(adapter);
+        rvComments = findViewById(R.id.rvComments);
+        allComments = new ArrayList<>();
+        adapter = new CommentsAdapter(this, allComments);
+        rvComments.setAdapter(adapter);
 
         LinearLayoutManager linearLayoutManager = new LinearLayoutManager(this);
-        //rvComments.setLayoutManager(linearLayoutManager);
+        rvComments.setLayoutManager(linearLayoutManager);
 
         post = Parcels.unwrap(getIntent().getParcelableExtra("post"));
 
@@ -68,75 +68,78 @@ public class PostDetailsActivity extends AppCompatActivity {
         tvCreatedAt.setText(post.getCreatedAt().toString());
         ParseFile image = post.getImage();
         if (image != null) { Glide.with(this).load(image.getUrl()).into(ivPicture); }
-        //tvPostLikes.setText(post.likeCountDisplayText());
+        tvPostLikes.setText(post.likeCountDisplayText());
         tvCaption.setText(post.getCaption());
 
-//        if (post.getLikedBy().contains(ParseUser.getCurrentUser().getObjectId())) { ibPostLikes.setColorFilter(Color.RED);
-//        } else { ibPostLikes.setColorFilter(Color.DKGRAY); }
+        if (post.getLikedBy().contains(ParseUser.getCurrentUser().getObjectId())) {
+            ibPostLikes.setColorFilter(Color.RED);
+        } else {
+            ibPostLikes.setColorFilter(Color.DKGRAY);
+        }
 
-        //queryComments();
+        queryComments();
 
-//        ibPostLikes.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                List<String> likedBy = post.getLikedBy();
-//                if(!likedBy.contains(ParseUser.getCurrentUser().getObjectId())) {
-//                    likedBy.add(ParseUser.getCurrentUser().getObjectId());
-//                    post.setLikedBy(likedBy);
-//                    ibPostLikes.setColorFilter(Color.RED);
-//                }
-//                else {
-//                    likedBy.remove(ParseUser.getCurrentUser().getObjectId());
-//                    post.setLikedBy(likedBy);
-//                    ibPostLikes.setColorFilter(Color.DKGRAY);
-//                }
-//                post.saveInBackground();
-//                tvPostLikes.setText(post.likeCountDisplayText());
-//            }
-//        });
+        ibPostLikes.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                List<String> likedBy = post.getLikedBy();
+                if(!likedBy.contains(ParseUser.getCurrentUser().getObjectId())) {
+                    likedBy.add(ParseUser.getCurrentUser().getObjectId());
+                    post.setLikedBy(likedBy);
+                    ibPostLikes.setColorFilter(Color.RED);
+                }
+                else {
+                    likedBy.remove(ParseUser.getCurrentUser().getObjectId());
+                    post.setLikedBy(likedBy);
+                    ibPostLikes.setColorFilter(Color.DKGRAY);
+                }
+                post.saveInBackground();
+                tvPostLikes.setText(post.likeCountDisplayText());
+            }
+        });
 
-//        ibPostComments.setOnClickListener(new View.OnClickListener() {
-//            @Override
-//            public void onClick(View view) {
-//                Intent i = new Intent(PostDetailsActivity.this, CommentActivity.class);
-//                i.putExtra("post_to_comment_on", Parcels.wrap(post));
-//                //noinspection deprecation
-//                PostDetailsActivity.this.startActivityForResult(i, 109);
-//            }
-//        });
+        ibPostComments.setOnClickListener(new View.OnClickListener() {
+            @Override
+            public void onClick(View view) {
+                Intent i = new Intent(PostDetailsActivity.this, CommentActivity.class);
+                i.putExtra("post_to_comment_on", Parcels.wrap(post));
+                //noinspection deprecation
+                PostDetailsActivity.this.startActivityForResult(i, 109);
+            }
+        });
     }
 
-//    @SuppressLint("NotifyDataSetChanged")
-//    @Override
-//    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
-//        super.onActivityResult(requestCode, resultCode, data);
-//
-//        if (resultCode == RESULT_OK) {
-//            //subclass of Parcelable!
-//            Comment newComment = Objects.requireNonNull(data).getParcelableExtra("new_comment");
-//            allComments.add(0, newComment);
-//            adapter.notifyDataSetChanged();
-//        }
-//    }
+    @SuppressLint("NotifyDataSetChanged")
+    @Override
+    protected void onActivityResult(int requestCode, int resultCode, @Nullable Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
 
-//    private void queryComments() {
-//        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
-//        query.whereEqualTo(Comment.KEY_POST, post);
-//        query.include(Comment.KEY_AUTHOR);
-//        query.setLimit(20);
-//        query.addDescendingOrder(Comment.KEY_CREATED_AT);
-//        query.findInBackground(new FindCallback<Comment>() {
-//            @SuppressLint("NotifyDataSetChanged")
-//            @Override
-//            public void done(List<Comment> comments, ParseException e) {
-//                if (e != null) {
-//                    Log.e(TAG, "Unable to retrieve comments");
-//                    return;
-//                }
-//                for (Comment comment : comments) { Log.i(TAG, "Comment: " + comment.getBody() + ", username: " + comment.getAuthor().getUsername()); }
-//                allComments.addAll(comments);
-//                adapter.notifyDataSetChanged();
-//            }
-//        });
-//    }
+        if (resultCode == RESULT_OK) {
+            //subclass of Parcelable!
+            Comment newComment = Objects.requireNonNull(data).getParcelableExtra("new_comment");
+            allComments.add(0, newComment);
+            adapter.notifyDataSetChanged();
+        }
+    }
+
+    private void queryComments() {
+        ParseQuery<Comment> query = ParseQuery.getQuery(Comment.class);
+        query.whereEqualTo(Comment.KEY_POST, post);
+        query.include(Comment.KEY_AUTHOR);
+        query.setLimit(20);
+        query.addDescendingOrder(Comment.KEY_CREATED_AT);
+        query.findInBackground(new FindCallback<Comment>() {
+            @SuppressLint("NotifyDataSetChanged")
+            @Override
+            public void done(List<Comment> comments, ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Unable to retrieve comments");
+                    return;
+                }
+                for (Comment comment : comments) { Log.i(TAG, "Comment: " + comment.getBody() + ", username: " + comment.getAuthor().getUsername()); }
+                allComments.addAll(comments);
+                adapter.notifyDataSetChanged();
+            }
+        });
+    }
 }

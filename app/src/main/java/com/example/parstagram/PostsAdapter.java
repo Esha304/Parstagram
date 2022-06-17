@@ -15,19 +15,22 @@ import androidx.annotation.NonNull;
 import androidx.appcompat.app.AppCompatActivity;
 import androidx.fragment.app.Fragment;
 import androidx.recyclerview.widget.RecyclerView;
-
 import com.bumptech.glide.Glide;
+import com.example.parstagram.R;
+import com.example.parstagram.CommentActivity;
+import com.example.parstagram.PostDetailsActivity;
 import com.example.parstagram.fragments.ProfileFragment;
+import com.example.parstagram.Post;
+import com.example.parstagram.User;
 import com.parse.ParseFile;
-import org.parceler.Parcels;
 import com.parse.ParseUser;
-
+import org.parceler.Parcels;
 import java.util.List;
 
 public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> {
     private static final String TAG = "PostsAdapter";
-    private Context context;
-    private List<Post> posts;
+    private final Context context;
+    private final List<Post> posts;
 
     public PostsAdapter(Context context, List<Post> posts) {
         this.context = context;
@@ -59,51 +62,53 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
     }
 
     class ViewHolder extends RecyclerView.ViewHolder {
-        //private ImageView ivProfile;
+        private ImageView ivProfile;
         private TextView tvUsername;
-        //private TextView tvLikes;
-        private final ImageView ivImage;
-        private final TextView tvCaption;
-        //private final ImageButton ibLike;
-        //private final ImageButton ibComment;
+        private TextView tvLikes;
+        private ImageView ivImage;
+        private TextView tvCaption;
+        private ImageButton ibLikes;
+        private ImageButton ibComments;
 
         public ViewHolder(@NonNull View itemView) {
             super(itemView);
-            //ivProfile = itemView.findViewById(R.id.ivProfile);
+            ivProfile = itemView.findViewById(R.id.ivProfile);
             tvUsername = itemView.findViewById(R.id.tvUsername);
-            //tvLikes = itemView.findViewById(R.id.tvPostLikes);
+            tvLikes = itemView.findViewById(R.id.tvPostLikes);
             ivImage = itemView.findViewById(R.id.ivImage);
             tvCaption = itemView.findViewById(R.id.tvCaption);
-            //ibLike = itemView.findViewById(R.id.ibPostLikes);
-            //ibComment = itemView.findViewById(R.id.ibComment);
+            ibLikes = itemView.findViewById(R.id.ibPostLikes);
+            ibComments = itemView.findViewById(R.id.ibComment);
         }
 
         @SuppressLint("SetTextI18n")
         public void bind(Post post) {
             tvCaption.setText(post.getCaption());
             tvUsername.setText(post.getUser().getUsername());
+            ParseFile profile = post.getUser().getProfile();
+            if (profile != null) { Glide.with(context)
+                    .load(profile.getUrl())
+                    .into(ivProfile); }
+            tvLikes.setText(post.likeCountDisplayText());
+
+            if (post.getLikedBy().contains(ParseUser.getCurrentUser().getObjectId())) {
+                ibLikes.setColorFilter(Color.RED);
+            } else { ibLikes.setColorFilter(Color.DKGRAY); }
+
             ParseFile image = post.getImage();
             if (image != null) {
                 Glide.with(context).load(image.getUrl()).into(ivImage);
             }
-            //tvLikes.setText(post.likeCountDisplayText());
 
-            //if (post.getLikedBy().contains(ParseUser.getCurrentUser().getObjectId())) {
-            //    ibLike.setColorFilter(Color.RED);
-            //} else { ibLike.setColorFilter(Color.DKGRAY); }
-
-            //ParseFile image = post.getImage();
-            //if (image != null) { Glide.with(context).load(image.getUrl()).into(ivImage); }
-
-//            ivProfile.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    //go to profile fragment
-//                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
-//                    Fragment profileFragment = new ProfileFragment(post.getParseUser(Post.KEY_USER));
-//                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, profileFragment).addToBackStack(null).commit();
-//                }
-//            });
+            ivProfile.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    //go to profile fragment
+                    AppCompatActivity activity = (AppCompatActivity) view.getContext();
+                    Fragment profileFragment = new ProfileFragment(post.getParseUser(Post.KEY_USER));
+                    activity.getSupportFragmentManager().beginTransaction().replace(R.id.flContainer, profileFragment).addToBackStack(null).commit();
+                }
+            });
 
             tvUsername.setOnClickListener(new View.OnClickListener() {
                 @Override
@@ -123,33 +128,33 @@ public class PostsAdapter extends RecyclerView.Adapter<PostsAdapter.ViewHolder> 
                 }
             });
 
-//            ibLike.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    List<String> likedBy = post.getLikedBy();
-//                    if (!likedBy.contains(ParseUser.getCurrentUser().getObjectId())) {
-//                        likedBy.add(ParseUser.getCurrentUser().getObjectId());
-//                        post.setLikedBy(likedBy);
-//                        ibLike.setColorFilter(Color.RED);
-//                    }
-//                    else {
-//                        likedBy.remove(ParseUser.getCurrentUser().getObjectId());
-//                        post.setLikedBy(likedBy);
-//                        ibLike.setColorFilter(Color.DKGRAY);
-//                    }
-//                    post.saveInBackground();
-//                    tvLikes.setText(post.likeCountDisplayText());
-//                }
-//            });
-//
-//            ibComment.setOnClickListener(new View.OnClickListener() {
-//                @Override
-//                public void onClick(View view) {
-//                    Intent i = new Intent(context, CommentActivity.class);
-//                    i.putExtra("post_to_comment_on", Parcels.wrap(post));
-//                    context.startActivity(i);
-//                }
-//            });
+            ibLikes.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    List<String> likedBy = post.getLikedBy();
+                    if (!likedBy.contains(ParseUser.getCurrentUser().getObjectId())) {
+                        likedBy.add(ParseUser.getCurrentUser().getObjectId());
+                        post.setLikedBy(likedBy);
+                        ibLikes.setColorFilter(Color.RED);
+                    }
+                    else {
+                        likedBy.remove(ParseUser.getCurrentUser().getObjectId());
+                        post.setLikedBy(likedBy);
+                        ibLikes.setColorFilter(Color.DKGRAY);
+                    }
+                    post.saveInBackground();
+                    tvLikes.setText(post.likeCountDisplayText());
+                }
+            });
+
+            ibComments.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View view) {
+                    Intent i = new Intent(context, CommentActivity.class);
+                    i.putExtra("post_to_comment_on", Parcels.wrap(post));
+                    context.startActivity(i);
+                }
+            });
         }
     }
 }

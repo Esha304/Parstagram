@@ -54,6 +54,10 @@ public class LoginActivity extends AppCompatActivity {
                 signUpUser(username, password);
             }
         });
+
+        if(ParseUser.getCurrentUser() != null) {
+            goMainActivity();
+        }
     }
 
     private void loginUser(String username, String password) {

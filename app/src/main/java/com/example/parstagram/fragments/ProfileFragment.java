@@ -48,7 +48,7 @@ public class ProfileFragment extends PostsFragment {
         rvPosts.setLayoutManager(gridLayoutManager);
         rvPosts.addOnScrollListener(scrollListener);
 
-        queryPosts(0);
+        // queryPosts(0);
 
         //SwipeRefresh
         swipeContainer = view.findViewById(R.id.swipeContainer);

@@ -24,8 +24,10 @@ import android.widget.EditText;
 import android.widget.ImageView;
 import android.widget.Toast;
 
+import com.example.parstagram.MainActivity;
 import com.example.parstagram.Post;
 import com.example.parstagram.R;
+import com.example.parstagram.User;
 import com.parse.ParseException;
 import com.parse.ParseFile;
 import com.parse.ParseUser;
@@ -135,6 +137,20 @@ public class ComposeFragment extends Fragment {
         if (!mediaStorageDir.exists() && !mediaStorageDir.mkdirs()) { Log.d(TAG, "Failed to create directory"); }
         //return the file target for the photo based on filename
         return new File(mediaStorageDir.getPath() + File.separator + photoFileName);
+    }
+
+    private void savePfp(User currentUser, File photoFile) {
+        currentUser.setProfile(new ParseFile(photoFile));
+        currentUser.saveInBackground(new SaveCallback() {
+            @Override
+            public void done(ParseException e) {
+                if (e != null) {
+                    Log.e(TAG, "Error while saving");
+                }
+                Log.i(TAG, "Saved PFP");
+                ivImage.setImageResource(0);
+            }
+        });
     }
 
     private void savePost(String caption, ParseUser currentUser, File photoFile) {
