@@ -21,7 +21,7 @@ The following **required** functionality is completed:
 The following **stretch** features are implemented:
 
 - [X] Style the login page to look like the real Instagram login page.
-- [ ] Style the feed to look like the real Instagram feed.
+- [X] Style the feed to look like the real Instagram feed.
 - [X] User can load more posts once they reach the bottom of the feed using endless scrolling.
 - [X] User should switch between different tabs using fragments and a Bottom Navigation View.
   - [X] Feed Tab (to view all posts from all users)
@@ -30,21 +30,21 @@ The following **stretch** features are implemented:
 - [X] Show the username and creation time for each post
 - User Profiles:
   - [ ] Allow the logged in user to add a profile photo
-  - [ ] Display the profile photo with each post
-  - [ ] Tapping on a post's username or profile photo goes to that user's profile page
-  - [ ] User Profile shows posts in a grid
+  - [X] Display the profile photo with each post
+  - [X] Tapping on a post's username or profile photo goes to that user's profile page
+  - [X] User Profile shows posts in a grid
 - [ ] After the user submits a new post, show an indeterminate progress bar while the post is being uploaded to Parse
-- [ ] User can comment on a post and see all comments for each post in the post details screen.
-- [ ] User can like a post and see number of likes for each post in the post details screen.
+- [X] User can comment on a post and see all comments for each post in the post details screen.
+- [X] User can like a post and see number of likes for each post in the post details screen.
 
 The following **additional** features are implemented:
 
-- [ ] List anything else that you can get done to improve the app functionality!
+- [X] User can see a splash activity before main login one.
 
-Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
+<!-- Please list two areas of the assignment you'd like to **discuss further with your peers** during the next class (examples include better ways to implement something, how to extend your app in certain ways, etc):
 
-1.
-2.
+1. Fragments
+2.  -->
 
 ## Video Walkthrough
 
